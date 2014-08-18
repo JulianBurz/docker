@@ -1,0 +1,31 @@
+<VirtualHost *:80>
+	ServerAdmin admin@twine
+
+	DocumentRoot /var/www/
+	
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+	
+	<Directory /var/www/>
+		EnableSendfile Off
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride All
+		Order allow,deny
+		allow from all
+	</Directory>
+	
+	WSGIDaemonProcess api-data processes=2 maximum-requests=500 threads=2
+	WSGIScriptAlias /api-data /var/www/siv-v3/api-data/twine.wsgi
+	<Directory /var/www/siv-v3/api-data/twine>
+		WSGIProcessGroup api-data
+		WSGIApplicationGroup %{GLOBAL}
+		Order deny,allow
+		Allow from all
+	</Directory>
+
+	ErrorLog /var/log/apache2/error.log
+	LogLevel warn
+	CustomLog /var/log/apache2/access.log combined
+</VirtualHost>
