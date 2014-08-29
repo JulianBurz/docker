@@ -2,20 +2,21 @@ $setup = <<SCRIPT
 docker stop $(docker ps -a -q)
 docker rm $(docker ps -a -q)
 
-docker build -t web /var/www/docker/web
-#docker build -t mongo /var/www/docker/mongo
-#docker build -t postgresql /var/www/docker/postgresql
+cd /var/www/
+docker build -t web docker/web
+docker build -t mongo docker/mongo
+docker build -t postgresql docker/postgresql
 
 docker run -d -p 80:80 --name web web:latest
-#docker run -d -p 27017:27017 --name mongo mongo:latest
-#docker run -d -p 5432:5432  --name postgresql postgresql:latest
+docker run -d -p 27017:27017 --name mongo mongo:latest
+docker run -d -p 5432:5432  --name postgresql postgresql:latest
 
 SCRIPT
 
 $start = <<SCRIPT
 docker start web
-#docker start mongo
-#docker start postgresql
+docker start mongo
+docker start postgresql
 
 SCRIPT
 
@@ -26,6 +27,11 @@ Vagrant.configure("2") do |config|
   config.vm.provider "twine" do |t|
     t.memory = 4096
     t.cpus = 2
+  end
+
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
   end
   
   config.vm.boot_timeout = 900

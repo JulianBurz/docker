@@ -21,6 +21,10 @@ ADD supervisord-sshd.conf /etc/supervisor/conf.d/supervisord-sshd.conf
 RUN mkdir -p /data/db
 RUN export LC_ALL=C
 
+# Import datasets
+#RUN mongorestore --drop -d siv /docker/src/his.bson
+#RUN mongorestore --drop -d siv /docker/src/de_urban.bson
+
 # SSHD config
 RUN mkdir /var/run/sshd
 RUN echo 'root:password' |chpasswd

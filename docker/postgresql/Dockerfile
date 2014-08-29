@@ -8,7 +8,7 @@ ADD ./ /docker/
 RUN chmod -R 755 /docker/
 
 # Install packages
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y -q sudo supervisor ssh python-software-properties software-properties-common postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3 postgresql-9.3-postgis-2.1 postgresql-plpython-9.3 libpq-dev
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y -q sudo supervisor ssh python-software-properties software-properties-common postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3 postgresql-9.3-postgis-2.1 postgresql-plpython-9.3 pgadmin3 libpq-dev
 
 # Required to allow connection to postgresql, TODO: find why and if really required
 RUN mkdir /etc/ssl/private-copy; mv /etc/ssl/private/* /etc/ssl/private-copy/; rm -r /etc/ssl/private; mv /etc/ssl/private-copy /etc/ssl/private; chmod -R 0700 /etc/ssl/private; chown -R postgres /etc/ssl/private

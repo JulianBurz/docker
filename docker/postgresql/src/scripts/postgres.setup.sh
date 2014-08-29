@@ -20,3 +20,6 @@ $POSTGRESQL_SINGLE <<< 'CREATE EXTENSION "uuid-ossp";' > /dev/null
 
 echo "Starting postgres..."
 exec sudo -u postgres $POSTGRESQL_BIN --config-file=$POSTGRESQL_CONFIG_FILE
+
+echo "Importing dataset..."
+/docker/src/scripts/postgres.build.sh

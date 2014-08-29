@@ -1,11 +1,11 @@
 #!/bin/sh
 
-# build / patch files are placed in /var/www/vagrant/src/postgres/
+# build / patch files are placed in /docker/src/ of postgresql docker container
 # ensure that only patch files for a single instance are located in the directory
 
 # to run manually
-#	vagrant ssh
-#	. /var/www/vagrant/src/scripts/postgres.build.sh
+#	ssh into postgresql container
+#	/docker/src/scripts/postgres.build.sh
 
 instance=twine
 
@@ -17,8 +17,8 @@ sudo -u postgres psql -q -c "DROP DATABASE IF EXISTS $instance;" > /dev/null 2>&
 # create database
 sudo -u postgres psql -q -c "CREATE DATABASE $instance WITH TEMPLATE=template0 OWNER=admin ENCODING='UTF8' LC_COLLATE='en_US.utf8' LC_CTYPE='en_US.utf8';"
 
-echo "    changing directory to /var/www/vagrant/src/postgres"
-cd /var/www/vagrant/src/postgres
+echo "    changing directory to /docker/src/"
+cd /docker/src/
 
 echo "    create extensions"
 sudo -u postgres psql -q $instance < pre.extensions.sql
@@ -50,10 +50,10 @@ for f in [0-9][0-9]*.sql; do
 	sudo -u postgres psql -q $instance < "$f" > /dev/null 2>&1
 done
 
-echo "    clearing python bytecode"
-find /var/www/siv-v3/api-data -name "*.pyc" -exec rm -rf {} \;
+#echo "    clearing python bytecode"
+#find /var/www/siv-v3/api-data -name "*.pyc" -exec rm -rf {} \;
 
-echo "    restating apache"
-sudo service apache2 restart
+#echo "    restating apache"
+#sudo service apache2 restart
 
 echo "... twine ($instance instance) db creation script complete"
