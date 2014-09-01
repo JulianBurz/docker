@@ -55,7 +55,7 @@ With Packages:
 ## VM Passwords
 - rockmongo username:password are admin:admin
 - postgres username:password are admin:admin
-- SSH into any of the docker containers with root:password (with the exception of postgresql container until the SSH feature is added)
+- SSH into any of the docker containers with root:password
 
 ## Known issues (ETL NOT YET ADDED)
 - **Hardware virtualization.** Issues have been reported in Windows 7 when hardward virtualization was not enabled in the system bios. http://www.virtualbox.org/manual/ch10.html
