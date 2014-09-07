@@ -23,6 +23,7 @@ RUN mkdir /etc/ssl/private-copy; mv /etc/ssl/private/* /etc/ssl/private-copy/; r
 # Add image config
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD supervisord-postgresql.conf /etc/supervisor/conf.d/supervisord-postgresql.conf
+ADD supervisord-postgresql-build.conf /etc/supervisor/conf.d/supervisord-postgresql-build.conf
 ADD supervisord-sshd.conf /etc/supervisor/conf.d/supervisord-sshd.conf
 ADD src/postgresql.conf /etc/postgresql/9.3/main/postgresql.conf
 ADD src/pg_hba.conf /etc/postgresql/9.3/main/pg_hba.conf
@@ -37,6 +38,9 @@ RUN echo 'root:password' |chpasswd
 
 EXPOSE 22 5432
 CMD ["/usr/bin/supervisord"] 
+
+# Postgresql build
+#RUN nohup /docker/src/scripts/postgres.build.sh >/dev/null 2>&1 &
 
 # Test with command below in vagrant
 #sudo apt-get -y install postgresql-client && psql -h localhost -U admin postgres
