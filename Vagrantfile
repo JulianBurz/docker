@@ -7,9 +7,11 @@ docker build -t web docker/web
 docker build -t mongo docker/mongo
 docker build -t postgresql docker/postgresql
 
+DOCKER_DIR=/docker/
+
 docker run -d -p 80:80 --name web web:latest
 docker run -d -p 27017:27017 --name mongo mongo:latest
-docker run -d -p 5432:5432  --name postgresql postgresql:latest
+docker run -d -p 5432:5432 -v "$DOCKER_DIR"docker/postgresql:/docker --name postgresql postgresql:latest
 
 SCRIPT
 

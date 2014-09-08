@@ -4,8 +4,8 @@ RUN locale-gen en_US.UTF-8
 RUN update-locale LANG=en_US.UTF-8
 
 # Add files to docker container
-ADD ./ /docker/
-RUN chmod -R 755 /docker/
+ADD ./ /docker_add/
+RUN chmod -R 755 /docker_add/
 
 # Install packages
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y -q ssh sudo supervisor wget
@@ -30,7 +30,7 @@ ADD src/pg_hba.conf /etc/postgresql/9.3/main/pg_hba.conf
 
 # Postgresql setup
 RUN chown postgres:postgres /etc/postgresql/9.3/main/*.conf
-RUN /docker/src/scripts/postgres.setup.sh
+RUN /docker_add/src/scripts/postgres.setup.sh
 
 # SSHD config
 RUN mkdir /var/run/sshd
@@ -38,9 +38,6 @@ RUN echo 'root:password' |chpasswd
 
 EXPOSE 22 5432
 CMD ["/usr/bin/supervisord"] 
-
-# Postgresql build
-#RUN nohup /docker/src/scripts/postgres.build.sh >/dev/null 2>&1 &
 
 # Test with command below in vagrant
 #sudo apt-get -y install postgresql-client && psql -h localhost -U admin postgres
