@@ -1,12 +1,12 @@
 FROM ubuntu:12.04
 
 # Add files to docker container
-ADD ./ /docker/
+ADD ./ /docker_add/
 ADD ./siv-v3/ /var/www/siv-v3/
-RUN chmod 755 /docker/*.sh
+RUN chmod 755 /docker_add/*.sh
 
 # Install packages
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install ssh sudo supervisor git apache2 libapache2-mod-wsgi libapache2-mod-php5 curl php5 php5-curl php5-cli php-pear php5-dev php-apc php5-gd php5-pgsql phppgadmin make build-essential libpcre3-dev libtiff4 libgif4 python-software-properties software-properties-common
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install ssh sudo supervisor git apache2 libapache2-mod-wsgi libapache2-mod-php5 curl php5 php5-curl php5-cli php-pear php5-dev php-apc php5-gd php5-pgsql phppgadmin make build-essential libpcre3-dev libtiff4 libgif4 python-software-properties software-properties-common python python-pip python-dev libpq-dev
 
 # Add repo with latest nodejs
 RUN add-apt-repository -y ppa:chris-lea/node.js
@@ -47,13 +47,21 @@ RUN mkdir -p /var/www/siv-v3/filestore
 RUN chmod 777 /var/www/siv-v3/filestore
 
 # Setup Twine tools
-RUN ln -sf /docker/src/scripts/twine-tools /usr/bin/twine-tools
+RUN ln -sf /docker_add/src/scripts/twine-tools /usr/bin/twine-tools
 
 # Setup Grunt
-RUN /docker/src/scripts/grunt-setup.sh
+RUN /docker_add/src/scripts/grunt-setup.sh
 
 # Setup phpPgAdmin
 RUN sed 's,allow from 127.0.0.0/255.0.0.0 ::1/128,allow from all,g' /etc/apache2/conf.d/phppgadmin > tmpfile && mv tmpfile /etc/apache2/conf.d/phppgadmin
+
+# Setup ETL
+RUN pip install --upgrade flask
+RUN pip install --upgrade pymongo
+RUN pip install --upgrade apscheduler==2.1.2
+RUN pip install --upgrade pandas
+RUN pip install --upgrade isoweek
+RUN pip install --upgrade psycopg2
 
 # SSHD config
 RUN mkdir /var/run/sshd
@@ -61,7 +69,7 @@ RUN echo 'root:password' |chpasswd
 
 EXPOSE 22 80
 
-#RUN /docker/run.sh # This casues "docker build" to never exit/ complete execution
+#RUN /docker_add/run.sh # This casues "docker build" to never exit/ complete execution
 CMD ["/usr/bin/supervisord"] 
 
 # Test with url below in browser

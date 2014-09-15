@@ -3,15 +3,15 @@ docker stop $(docker ps -a -q)
 docker rm $(docker ps -a -q)
 
 cd /var/www/
-docker build -t web docker/web
 docker build -t mongo docker/mongo
 docker build -t postgresql docker/postgresql
+docker build -t web docker/web
 
 DOCKER_DIR=/var/www/docker/
 
-docker run -d -p 80:80 --name web web:latest
-docker run -d -p 27017:27017 --name mongo mongo:latest
+docker run -d -p 27017:27017 -v "$DOCKER_DIR"mongo:/docker --name mongo mongo:latest
 docker run -d -p 5432:5432 -v "$DOCKER_DIR"postgresql:/docker --name postgresql postgresql:latest
+docker run -d -p 80:80 -v "$DOCKER_DIR"web:/docker --link mongo:mongo --link postgresql:postgresql --name web web:latest
 
 SCRIPT
 

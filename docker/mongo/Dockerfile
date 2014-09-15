@@ -1,8 +1,8 @@
 FROM ubuntu:12.04
 
 # Add files to docker container
-ADD ./ /docker/
-RUN chmod 755 /docker/*.sh
+ADD ./ /docker_add/
+RUN chmod 755 /docker_add/*.sh
 
 # Install packages
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install ssh sudo supervisor
@@ -22,8 +22,8 @@ RUN mkdir -p /data/db
 RUN export LC_ALL=C
 
 # Import datasets
-#RUN mongorestore --drop -d siv /docker/src/his.bson
-#RUN mongorestore --drop -d siv /docker/src/de_urban.bson
+#RUN mongorestore --drop -d siv /docker_add/src/his.bson
+#RUN mongorestore --drop -d siv /docker_add/src/de_urban.bson
 
 # SSHD config
 RUN mkdir /var/run/sshd
@@ -31,7 +31,6 @@ RUN echo 'root:password' |chpasswd
 
 EXPOSE 27017
 
-#RUN /docker/run.sh # This casues "docker build" to never exit/ complete execution
 CMD ["/usr/bin/supervisord"] 
 
 # Test with command below in vagrant
