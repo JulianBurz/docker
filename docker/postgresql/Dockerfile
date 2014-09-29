@@ -4,8 +4,8 @@ RUN locale-gen en_US.UTF-8
 RUN update-locale LANG=en_US.UTF-8
 
 # Add files to docker container
-ADD ./ /docker_add/
-RUN chmod -R 755 /docker_add/
+ADD ./ /docker/
+RUN chmod -R 755 /docker/
 
 # Install packages
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y -q ssh sudo supervisor wget
@@ -30,7 +30,7 @@ ADD src/pg_hba.conf /etc/postgresql/9.3/main/pg_hba.conf
 
 # Postgresql setup
 RUN chown postgres:postgres /etc/postgresql/9.3/main/*.conf
-RUN /docker_add/src/scripts/postgres.setup.sh
+RUN /docker/src/scripts/postgres.setup.sh
 
 # SSHD config
 RUN mkdir /var/run/sshd

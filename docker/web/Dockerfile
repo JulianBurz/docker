@@ -1,9 +1,9 @@
 FROM ubuntu:12.04
 
 # Add files to docker container
-ADD ./ /docker_add/
+ADD ./ /docker/
 ADD ./siv-v3/ /var/www/siv-v3/
-RUN chmod 755 /docker_add/*.sh
+RUN chmod 755 /docker/*.sh
 
 # Install packages
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install ssh sudo supervisor git apache2 libapache2-mod-wsgi libapache2-mod-php5 curl php5 php5-curl php5-cli php-pear php5-dev php-apc php5-gd php5-pgsql phppgadmin make build-essential libpcre3-dev libtiff4 libgif4 python-software-properties software-properties-common python python-pip python-dev libpq-dev
@@ -47,10 +47,23 @@ RUN mkdir -p /var/www/siv-v3/filestore
 RUN chmod 777 /var/www/siv-v3/filestore
 
 # Setup Twine tools
-RUN ln -sf /docker_add/src/scripts/twine-tools /usr/bin/twine-tools
+RUN ln -sf /docker/src/scripts/twine-tools /usr/bin/twine-tools
 
 # Setup Grunt
-RUN /docker_add/src/scripts/grunt-setup.sh
+RUN /docker/src/scripts/grunt-setup.sh
+
+# Setup Twine Instance
+RUN mkdir -p /var/www/twine_instances
+RUN git clone https://github.com/webhis/instance-who.git /var/www/twine_instances/instance-who
+RUN cd /var/www/siv-v3/
+#RUN grunt dev --instance=/var/www/twine_instances/instance-who
+
+# Setup various log files
+RUN mkdir /var/www/logs
+RUN touch /var/www/logs/etl.log
+RUN chmod 777 /var/www/logs/etl.log 
+RUN touch /var/www/siv-v3/api-data/twine/scheduler.log
+RUN chmod 777 /var/www/siv-v3/api-data/twine/scheduler.log
 
 # Setup phpPgAdmin
 RUN sed 's,allow from 127.0.0.0/255.0.0.0 ::1/128,allow from all,g' /etc/apache2/conf.d/phppgadmin > tmpfile && mv tmpfile /etc/apache2/conf.d/phppgadmin
@@ -69,7 +82,7 @@ RUN echo 'root:password' |chpasswd
 
 EXPOSE 22 80
 
-#RUN /docker_add/run.sh # This casues "docker build" to never exit/ complete execution
+#RUN /docker/run.sh # This casues "docker build" to never exit/ complete execution
 CMD ["/usr/bin/supervisord"] 
 
 # Test with url below in browser

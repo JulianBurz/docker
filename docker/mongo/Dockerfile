@@ -1,8 +1,8 @@
 FROM ubuntu:12.04
 
 # Add files to docker container
-ADD ./ /docker_add/
-RUN chmod 755 /docker_add/*.sh
+ADD ./ /docker/
+RUN chmod 755 /docker/*.sh
 
 # Install packages
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install ssh sudo supervisor
@@ -22,8 +22,8 @@ RUN mkdir -p /data/db
 RUN export LC_ALL=C
 
 # Import datasets
-#RUN mongorestore --drop -d siv /docker_add/src/his.bson
-#RUN mongorestore --drop -d siv /docker_add/src/de_urban.bson
+#RUN mongorestore --drop -d siv /docker/src/his.bson
+#RUN mongorestore --drop -d siv /docker/src/de_urban.bson
 
 # SSHD config
 RUN mkdir /var/run/sshd
