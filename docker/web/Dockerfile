@@ -2,7 +2,6 @@ FROM ubuntu:12.04
 
 # Add files to docker container
 ADD ./ /docker/
-ADD ./siv-v3/ /var/www/siv-v3/
 RUN chmod 755 /docker/*.sh
 
 # Install packages
@@ -35,35 +34,14 @@ RUN dpkg -i /tmp/prince_8.1-5_ubuntu12.04_amd64.deb
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD supervisord-apache2.conf /etc/supervisor/conf.d/supervisord-apache2.conf
 ADD supervisord-sshd.conf /etc/supervisor/conf.d/supervisord-sshd.conf
+ADD supervisord-system.conf /etc/supervisor/conf.d/supervisord-system.conf
 ADD templates/index.html /var/www/index.html
 ADD templates/phpinfo.php /var/www/phpinfo.php
 ADD templates/vhost /etc/apache2/sites-available/default
-ADD templates/siv.ini /var/www/siv-v3/siv.ini
-ADD templates/config.json /var/www/siv-v3/app/config.json
 ADD templates/TwineHeadlessBrowser /home/TwineHeadlessBrowser
-
-# Setup filestore
-RUN mkdir -p /var/www/siv-v3/filestore
-RUN chmod 777 /var/www/siv-v3/filestore
 
 # Setup Twine tools
 RUN ln -sf /docker/src/scripts/twine-tools /usr/bin/twine-tools
-
-# Setup Grunt
-RUN /docker/src/scripts/grunt-setup.sh
-
-# Setup Twine Instance
-RUN mkdir -p /var/www/twine_instances
-RUN git clone https://github.com/webhis/instance-who.git /var/www/twine_instances/instance-who
-RUN cd /var/www/siv-v3/
-#RUN grunt dev --instance=/var/www/twine_instances/instance-who
-
-# Setup various log files
-RUN mkdir /var/www/logs
-RUN touch /var/www/logs/etl.log
-RUN chmod 777 /var/www/logs/etl.log 
-RUN touch /var/www/siv-v3/api-data/twine/scheduler.log
-RUN chmod 777 /var/www/siv-v3/api-data/twine/scheduler.log
 
 # Setup phpPgAdmin
 RUN sed 's,allow from 127.0.0.0/255.0.0.0 ::1/128,allow from all,g' /etc/apache2/conf.d/phppgadmin > tmpfile && mv tmpfile /etc/apache2/conf.d/phppgadmin
