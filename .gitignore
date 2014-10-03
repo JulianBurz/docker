@@ -1,5 +1,4 @@
 .vagrant/
-docker/web/siv-v3/
 docker/web/src/
 docker/mongo/src/
 docker/postgresql/src/

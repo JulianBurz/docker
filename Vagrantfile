@@ -11,7 +11,7 @@ DOCKER_DIR=/var/www/docker/
 
 docker run -d -p 27017:27017 -v "$DOCKER_DIR"mongo:/docker --name mongo mongo:latest
 docker run -d -p 5432:5432 -v "$DOCKER_DIR"postgresql:/docker --name postgresql postgresql:latest
-docker run -d -p 80:80 -v "$DOCKER_DIR"web:/docker -v "$DOCKER_DIR"web/siv-v3:/var/www/siv-v3 --link mongo:mongo --link postgresql:postgresql --name web web:latest
+docker run -d -p 80:80 -v "$DOCKER_DIR"web:/docker -v "$DOCKER_DIR"web/src/siv-v3:/var/www/siv-v3 --link mongo:mongo --link postgresql:postgresql --name web web:latest
 
 SCRIPT
 
