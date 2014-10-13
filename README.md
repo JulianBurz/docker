@@ -22,7 +22,7 @@ With Packages:
 2. Create a folder named 'twineapp/' and clone this repository (twineapp/docker).  
 3. Clone / copy in the twine repos and datasets  
     3.1. Clone 'siv-v3' github repository into 'twineapp/docker/docker/web/src/siv-v3/' directory (~55MB)  
-    3.2. **(optional)** Clone 'api-data' github repository into 'twineapp/docker/docker/web/src/siv-v3/api-data/' directory (~0.3MB)  
+    3.2. Clone 'api-data' github repository into 'twineapp/docker/docker/web/src/siv-v3/api-data/' directory (~0.3MB)  
     3.3. **(optional)** Clone 'documentation' github repository into 'twineapp/documentation/' directory  
     3.4. Copy twine postgresql build to 'twineapp/docker/docker/postgresql/src/' directory (~83MB)  
     3.5. **(optional)** Copy twine mongodb build to 'twineapp/docker/docker/mongo/src/' directory (~288MB)
@@ -44,6 +44,7 @@ With Packages:
 - Server should be ready to use at 192.168.50.5 (modify this static IP in Vagrantfile before bringing up the vagrant if required)
 - Test via http://192.168.50.5/phpinfo.php OR http://192.168.50.5/siv-v3/login.php
 - this project directory is linked to the webserver document root
+- phpPgAdmin is available at http://192.168.50.5/phppgadmin/
 - Command to copy files to Amazon EC2: scp -i ~/Desktop/ubuntu.pem sql/\* ubuntu@54.243.48.252:/var/www/docker/src/sql
 
 ## PHP Docs:
@@ -67,7 +68,3 @@ With Packages:
     - in your host, copy twineapp/docker/puppet/templates/config_local.py to twineapp/flaskapps/etl/ETL/config_local.py
     - $ sudo apachectl restart
     - You should now get a response at 192.168.50.5/etl/status
-
-## TODO
-- add ETL
-- add python

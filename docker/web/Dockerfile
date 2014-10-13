@@ -45,6 +45,7 @@ RUN ln -sf /docker/src/scripts/twine-tools /usr/bin/twine-tools
 
 # Setup phpPgAdmin
 RUN sed 's,allow from 127.0.0.0/255.0.0.0 ::1/128,allow from all,g' /etc/apache2/conf.d/phppgadmin > tmpfile && mv tmpfile /etc/apache2/conf.d/phppgadmin
+RUN sed "s,'localhost';,'postgresql';,g" /etc/phppgadmin/config.inc.php > tmpfile && mv tmpfile /etc/phppgadmin/config.inc.php
 
 # Setup ETL
 RUN pip install --upgrade flask
