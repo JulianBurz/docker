@@ -13,4 +13,11 @@ sleep 10
 done
 sleep 10
 
+echo "Importing dataset..."
 /docker/src/scripts/postgres.build.sh
+
+echo "Creating admin user and extensions..."
+sudo -u postgres psql -q -c "CREATE ROLE admin WITH LOGIN SUPERUSER CREATEDB CREATEROLE PASSWORD 'admin';"
+sudo -u postgres psql -q -c "CREATE EXTENSION postgis;"
+sudo -u postgres psql -q -c "CREATE EXTENSION postgis_topology;"
+sudo -u postgres psql -q -c 'CREATE EXTENSION "uuid-ossp";'
