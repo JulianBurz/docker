@@ -3,6 +3,7 @@
 # build / patch files are placed in /docker/src/ of postgresql docker container
 # ensure that only patch files for a single instance are located in the directory
 
+# !! password suffix is specified in line 54
 # !! schema build queries must be edited to add in instance specific variable
 
 # to run manually
@@ -11,8 +12,9 @@
 
 # add  > /dev/null 2>&1 to end of line to supress output
 
-instance=wra
-baseurl=wra
+instance=twine
+baseurl=siv-v3
+usersuffix=_unhcr
 
 echo "Creating twine ($instance instance) database"
 #terminate current connections
@@ -50,7 +52,7 @@ echo "    adjusting auto increments"
 sudo -u postgres psql -q $instance < post.autoincrement.sql
 
 echo "    creating database users"
-sudo -u postgres psql -q $instance -v v_instance="$instance" -v v_pwd1="'wra1'" -v v_pwd2="'wra2'" < siv.dbusers.sql
+sudo -u postgres psql -q $instance -v v_instance="$instance"  -v v_usersuffix="$usersuffix" -v v_pwd1="'unhcr'" -v v_pwd2="'unhcr'" < siv.dbusers.sql
 
 echo "    applying SQL patches"
 for f in [0-9][0-9]*.sql; do
