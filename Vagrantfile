@@ -6,14 +6,14 @@ cd /var/www/
 docker build -t mongo docker/mongo
 docker build -t postgresql docker/postgresql
 docker build -t web docker/web
-#docker build -t web docker/enketo
+#docker build -t enketo docker/enketo
 
 DOCKER_DIR=/var/www/docker/
 
 docker run -d -p 27017:27017 -v "$DOCKER_DIR"mongo:/docker --name mongo mongo:latest
 docker run -d -p 5432:5432 -v "$DOCKER_DIR"postgresql:/docker --name postgresql postgresql:latest
 docker run -d -p 80:80 -v "$DOCKER_DIR"web:/docker -v "$DOCKER_DIR"web/src/siv-v3:/var/www/siv-v3 --link mongo:mongo --link postgresql:postgresql --name web web:latest
-#docker run -d -p 8006:8005 -p 35729:35729 -v "$DOCKER_DIR"enketo:/docker --name enketo enketo:latest
+#docker run -d -p 8006:8005 -p 35729:35729 --name enketo enketo:latest
 
 SCRIPT
 

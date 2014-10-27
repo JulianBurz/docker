@@ -26,6 +26,7 @@ With Packages:
     3.3. **(optional)** Clone 'documentation' github repository into 'twineapp/documentation/' directory  
     3.4. Copy twine postgresql build to 'twineapp/docker/docker/postgresql/src/' directory (~83MB)  
     3.5. **(optional)** Copy twine mongodb build to 'twineapp/docker/docker/mongo/src/' directory (~288MB)
+    3.6. **(optional)** Clone 'enketo-express' github repository to 'twineapp/docker/docker/enketo/src/' directory (~6.1MB)
 4. Run terminal, go into 'twineapp/docker/', and execute the command 'vagrant up'. This will download the base box of ubuntu (~35MB), and bring up the twine vm  
 
 ## Working with the twine vagrant:
@@ -58,7 +59,7 @@ With Packages:
 - postgres username:password are admin:admin
 - SSH into any of the docker containers with root:password
 
-## Known issues (ETL NOT YET ADDED)
+## Known issues
 - **Hardware virtualization.** Issues have been reported in Windows 7 when hardward virtualization was not enabled in the system bios. http://www.virtualbox.org/manual/ch10.html
 - **Python install in Windows hosts.** The etl-setup.sh script is not executing in windows hosts. To run in manually:
     - bring up the vagrant
