@@ -18,9 +18,10 @@ RUN /docker/start-system.sh
 
 # SSHD config
 RUN mkdir /var/run/sshd
-RUN chmod 0755 /var/run/sshd
 RUN echo "root:password" | chpasswd
 
+# SSH login fix. Otherwise user is kicked off after login
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 RUN sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 EXPOSE 22 8005

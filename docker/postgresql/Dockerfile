@@ -1,4 +1,4 @@
-FROM ubuntu:12.04
+FROM ubuntu:14.04
 
 RUN locale-gen en_US.UTF-8
 RUN update-locale LANG=en_US.UTF-8
@@ -8,9 +8,9 @@ ADD ./ /docker/
 RUN chmod -R 755 /docker/
 
 # Install packages
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y -q ssh sudo supervisor wget
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y -q ssh sudo supervisor wget openssh-server
 
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" >> /etc/apt/sources.list
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main" >> /etc/apt/sources.list
 RUN wget --quiet -O - http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | sudo apt-key add -
 RUN update-alternatives --remove postmaster.1.gz /usr/share/postgresql/9.1/man/man1/postmaster.1.gz
 
@@ -34,7 +34,11 @@ RUN /docker/src/scripts/postgres.setup.sh
 
 # SSHD config
 RUN mkdir /var/run/sshd
-RUN echo 'root:password' |chpasswd
+RUN echo "root:password" | chpasswd
+
+# SSH login fix. Otherwise user is kicked off after login
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+RUN sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 EXPOSE 22 5432
 CMD ["/usr/bin/supervisord"] 
