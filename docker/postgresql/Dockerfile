@@ -10,10 +10,6 @@ RUN chmod -R 755 /docker/
 # Install packages
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y -q ssh sudo supervisor wget openssh-server
 
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main" >> /etc/apt/sources.list
-RUN wget --quiet -O - http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | sudo apt-key add -
-RUN update-alternatives --remove postmaster.1.gz /usr/share/postgresql/9.1/man/man1/postmaster.1.gz
-
 # Install packages
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y -q python-software-properties software-properties-common postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3 postgresql-9.3-postgis-2.1 postgresql-plpython-9.3 pgadmin3 libpq-dev
 

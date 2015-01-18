@@ -1,7 +1,7 @@
 Vagrant and Docker setup for Twine
 =======================
 
-Virtual OS: Ubuntu 12.04 (Precise) x64
+Virtual OS: Ubuntu 14.04 (Trusty) x64
 With Packages:
 - Apache
 - PHP

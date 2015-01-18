@@ -28,7 +28,7 @@ touch /var/www/siv-v3/api-data/twine/scheduler.log
 chmod 777 /var/www/siv-v3/api-data/twine/scheduler.log
 
 # Setup Grunt
-RUN /docker/src/scripts/grunt-setup.sh
+/docker/src/scripts/grunt-setup.sh
 
 # Setup Twine Instance
 mkdir -p /var/www/twine_instances
