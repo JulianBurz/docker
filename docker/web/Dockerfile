@@ -5,7 +5,7 @@ ADD ./ /docker/
 RUN chmod 755 /docker/*.sh
 
 # Install packages
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install ssh sudo supervisor openssh-server git apache2 libapache2-mod-wsgi libapache2-mod-php5 curl php5 php5-curl php5-cli php-pear php5-dev php-apc php5-gd php5-pgsql phppgadmin make build-essential libpcre3-dev libtiff5 libgif4 python-software-properties software-properties-common python python-pip python-dev libpq-dev python-pandas
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install ssh sudo supervisor openssh-server git apache2 libapache2-mod-wsgi libapache2-mod-php5 curl php5 php5-curl php5-cli php-pear php5-dev php-apc php5-gd php5-pgsql phppgadmin make build-essential libpcre3-dev libtiff5 libgif4 python-software-properties software-properties-common python python-pip python-dev libpq-dev
 
 # Add repo with latest nodejs
 RUN add-apt-repository -y ppa:chris-lea/node.js
@@ -47,12 +47,19 @@ RUN ln -sf /docker/src/scripts/twine-tools /usr/bin/twine-tools
 RUN sed 's,allow from 127.0.0.0/255.0.0.0 ::1/128,allow from all,g' /etc/apache2/conf.d/phppgadmin > tmpfile && mv tmpfile /etc/apache2/conf.d/phppgadmin
 RUN sed "s,'localhost';,'postgresql';,g" /etc/phppgadmin/config.inc.php > tmpfile && mv tmpfile /etc/phppgadmin/config.inc.php
 
+# Install latest pip
+RUN easy_install -U pip
+
 # Setup ETL
 RUN pip install --upgrade flask
 RUN pip install --upgrade pymongo
 RUN pip install --upgrade apscheduler==2.1.2
+RUN pip install --upgrade pandas
 RUN pip install --upgrade isoweek
 RUN pip install --upgrade psycopg2
+
+# Setup api-data requirements
+RUN pip install -r /docker/src/siv-v3/api-data/requirements.txt
 
 # SSHD config
 RUN mkdir /var/run/sshd
