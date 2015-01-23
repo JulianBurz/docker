@@ -26,6 +26,10 @@ touch /var/www/logs/etl.log
 chmod 777 /var/www/logs/etl.log 
 touch /var/www/siv-v3/api-data/twine/scheduler.log
 chmod 777 /var/www/siv-v3/api-data/twine/scheduler.log
+touch /var/www/siv-v3/api-data/twine/data_entry_scheduler.log
+chmod 777 /var/www/siv-v3/api-data/twine/data_entry_scheduler.log
+touch /var/www/siv-v3/api-data/twine/bounce_scheduler.log
+chmod 777 /var/www/siv-v3/api-data/twine/bounce_scheduler.log
 
 # Setup Grunt
 /docker/src/scripts/grunt-setup.sh
