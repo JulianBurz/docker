@@ -4,8 +4,16 @@ FROM ubuntu:14.04
 ADD ./ /docker/
 RUN chmod 755 /docker/*.sh
 
+# This needs to be done before anything else in order to ensure
+# that subsequent package installs are configured for language correctly
+RUN dpkg-reconfigure locales
+RUN sudo locale-gen fr_FR.UTF-8; sudo locale-gen en_US.UTF-8; sudo locale-gen de_DE.UTF-8; sudo locale-gen pt_BR.ISO-8859-1; sudo locale-gen es_ES.UTF-8;
+
+# Additional repos
+RUN echo "deb http://cran.rstudio.com/bin/linux/ubuntu trusty/" >> /etc/apt/sources.list && sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+
 # Install packages
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install ssh sudo supervisor openssh-server git apache2 libapache2-mod-wsgi libapache2-mod-php5 curl php5 php5-curl php5-cli php-pear php5-dev php-apc php5-gd php5-pgsql phppgadmin make build-essential libpcre3-dev libtiff5 libgif4 python-software-properties software-properties-common python python-pip python-dev libpq-dev
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install ssh sudo supervisor openssh-server git apache2 libapache2-mod-wsgi libapache2-mod-php5 curl php5 php5-curl php5-cli php-pear php5-dev php-apc php5-gd php5-pgsql phppgadmin make build-essential libpcre3-dev libtiff5 libgif4 python-software-properties software-properties-common python python-pip python-dev libpq-dev gettext gdal-bin r-base
 
 # Add repo with latest nodejs
 RUN add-apt-repository -y ppa:chris-lea/node.js
@@ -34,6 +42,7 @@ RUN dpkg -i /tmp/prince_9.0-5_ubuntu14.04_amd64.deb
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD supervisord-apache2.conf /etc/supervisor/conf.d/supervisord-apache2.conf
 ADD supervisord-sshd.conf /etc/supervisor/conf.d/supervisord-sshd.conf
+ADD supervisord-rserve.conf /etc/supervisor/conf.d/supervisord-rserve.conf
 ADD supervisord-system.conf /etc/supervisor/conf.d/supervisord-system.conf
 ADD templates/index.html /var/www/index.html
 ADD templates/phpinfo.php /var/www/phpinfo.php
@@ -60,6 +69,11 @@ RUN pip install --upgrade psycopg2
 
 # Setup api-data requirements
 RUN pip install -r /docker/src/siv-v3/api-data/requirements.txt
+
+# Setup R Serve
+RUN R CMD BATCH /docker/src/scripts/R-setup.R
+RUN useradd rserve
+RUN cp /docker/src/scripts/rserve /etc/init.d/rserve
 
 # SSHD config
 RUN mkdir /var/run/sshd

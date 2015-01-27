@@ -18,9 +18,9 @@ docker run -d -p 8006:8005 -p 35729:35729 --name enketo enketo:latest
 SCRIPT
 
 $start = <<SCRIPT
-docker start web
 docker start mongo
 docker start postgresql
+docker start web
 docker start enketo
 
 SCRIPT

@@ -1,5 +1,5 @@
 Vagrant and Docker setup for Twine
-=======================
+==================================
 
 Virtual OS: Ubuntu 14.04 (Trusty) x64
 With Packages:
@@ -12,6 +12,8 @@ With Packages:
 - Prince
 - Python
 - Flask
+- PostgreSQL
+- R + Rserve
 
 ## Requirements:
 - VirtualBox (https://www.virtualbox.org/wiki/Downloads), tested with v4.3.14
@@ -61,11 +63,4 @@ With Packages:
 
 ## Known issues
 - **Hardware virtualization.** Issues have been reported in Windows 7 when hardward virtualization was not enabled in the system bios. http://www.virtualbox.org/manual/ch10.html
-- **Python install in Windows hosts.** The etl-setup.sh script is not executing in windows hosts. To run in manually:
-    - bring up the vagrant
-    - ssh in
-    - $ cd /var/www/flaskapps/etl/
-    - $ sudo python setup.py install
-    - in your host, copy twineapp/docker/puppet/templates/config_local.py to twineapp/flaskapps/etl/ETL/config_local.py
-    - $ sudo apachectl restart
-    - You should now get a response at 192.168.50.5/etl/status
+- **Permissions Issues** There have been issues on Windows systems when the project code has been cloned and run from folders which do not have sufficient permissions for the application to run on the Host system causing issues inside the vagrant with permissions.

@@ -39,3 +39,6 @@ mkdir -p /var/www/twine_instances
 git clone https://github.com/webhis/instance-who.git /var/www/twine_instances/instance-who
 cd /var/www/siv-v3/
 grunt dev --instance=/var/www/twine_instances/instance-who
+
+# Setup node modules
+RUN /docker/src/scripts/topojson-setup.sh
